@@ -13,7 +13,7 @@ forward_lookup_zone:
 forward_lookup_zone:
 
 # Reverse Lookup Zones
-everse_lookup_zone: 
+reverse_lookup_zone: 
 
 # Zone variables
 conditional_forwarder: 
