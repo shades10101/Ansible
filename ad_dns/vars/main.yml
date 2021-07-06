@@ -1,0 +1,58 @@
+---
+# Connection variables
+# Point inventory file to domain controller
+ansible_user:
+ansible_password:
+ansible_connection: winrm
+ansible_port: 5985
+ansible_winrm_transport: ntlm
+ansible_winrm_server_cert_validation: ignore
+###############################################
+# Forward Lookup Zone
+forward_lookup_zone: 
+forward_lookup_zone:
+
+# Reverse Lookup Zones
+everse_lookup_zone: 
+
+# Zone variables
+conditional_forwarder: 
+
+# Conditional forwarders
+conditional_forwarders:
+  awsdev_univeris:
+    name: "{{ conditional_forwarder }}"
+    present_or_absent: present
+    replication_type: domain
+    dns_server_ips:
+    - '************'
+    - '************'
+    - '************'
+    - '************'
+
+
+# Primary zones
+primary_zones:
+  randomname:
+    zone_name: ""
+    replication_type: domain
+    zone_type: primary
+    present_or_absent: present
+    secure_dynamic_updates: secure
+
+# Alias CName record dictionary
+cname_records:
+  bamboo_cname:
+    name: "bamboo"
+    record_value: '************'
+    forward_lookup_zone: "{{ forward_lookup_zone }}"
+    present_or_absent: present 
+
+# Host A records
+a_records:
+  bucket:
+    name: "bucket"
+    record_value: '************'
+    forward_lookup_zone: "{{ forward_lookup_zone }}"
+    reverse_lookup_zone: "{{ reverse_lookup_zone }}"
+    present_or_absent: present

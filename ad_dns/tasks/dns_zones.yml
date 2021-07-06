@@ -1,0 +1,19 @@
+---
+- name: "Ensure forwarders are Created/Present/Deleted"
+  community.windows.win_dns_zone:
+    name: "{{ conditional_forwarder_aws}}"
+    type: forwarder
+    dns_servers: "{{ item.value.dns_server_ips }}"
+    replication: "{{ item.value.replication_type }}"
+    state: "{{ item.value.present_or_absent }}"
+  with_dict: "{{ conditional_forwarders }}"
+  retries: 5
+
+- name: "Ensure Primary Zones are created/present"
+  community.windows.win_dns_zone:
+    name: "{{ item.value.zone_name }}"
+    replication: "{{ item.value.replication_type }}"
+    type: "{{ item.value.zone_type }}"
+    state: "{{ item.value.present_or_absent }}"
+    dynamic_update: "{{ item.value.secure_dynamic_updates }}"
+  with_dict: "{{ primary_zones }}"

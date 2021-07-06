@@ -1,0 +1,3 @@
+---
+- include: "dns_zones.yml"
+- include: "dns_records.yml"

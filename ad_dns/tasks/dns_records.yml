@@ -1,0 +1,36 @@
+---
+- name: "Create CNAME records"
+  community.windows.win_dns_record:
+    name: "{{ item.value.name }}"
+    type: "CNAME"
+    value: "{{ item.value.record_value }}"
+    zone: "{{ item.value.forward_lookup_zone }}"
+    state: "{{ item.value.present_or_absent }}"
+  with_dict: "{{ cname_records }}"
+  register: result
+  until: result.msg is not defined
+  retries: 5
+
+- name: "Create Host (A) records"
+  community.windows.win_dns_record:
+    name: "{{ item.value.name }}"
+    type: "A"
+    value: "{{ item.value.record_value }}"
+    zone: "{{ item.value.forward_lookup_zone }}"
+    state: "{{ item.value.present_or_absent }}"
+  with_dict: "{{ a_records }}"
+  register: result
+  until: result.msg is not defined
+  retries: 5
+
+- name: "Create matching PTR records"
+  community.windows.win_dns_record:
+    name: "{{ item.value.record_value }}"
+    type: "PTR"
+    value: "{{ item.value.name }}"
+    zone: "{{ item.value.reverse_lookup_zone }}"
+    state: "{{ item.value.present_or_absent }}"
+  with_dict: "{{ a_records }}"
+  register: result
+  until: result.msg is not defined
+  retries: 5
